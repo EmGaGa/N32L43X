@@ -325,7 +325,7 @@
             <wLevel>2</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
-            <uC99>0</uC99>
+            <uC99>1</uC99>
             <uGnu>0</uGnu>
             <useXO>0</useXO>
             <v6Lang>1</v6Lang>
@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>N32L43X, USE_STDPERIPH_DRIVER, USE_FULL_ASSERT</Define>
               <Undefine></Undefine>
-              <IncludePath>..\inc;..\..\firmware\CMSIS\core;..\..\firmware\CMSIS\device;..\..\firmware\n32l43x_std_periph_driver\inc;..\peripheral\key\inc;..\peripheral\usart\inc;..\peripheral\led\inc;..\peripheral\rcc\inc;..\peripheral\lcd;..\..\rt-thread\bsp;..\..\rt-thread\include;..\..\rt-thread\include\libc;..\..\rt-thread\components\finsh</IncludePath>
+              <IncludePath>..\inc;..\..\firmware\CMSIS\core;..\..\firmware\CMSIS\device;..\..\firmware\n32l43x_std_periph_driver\inc;..\peripheral\key\inc;..\peripheral\usart\inc;..\peripheral\led\inc;..\peripheral\rcc\inc;..\peripheral\lcd;..\peripheral\spi_flash\inc;..\..\rt-thread\bsp;..\..\rt-thread\include;..\..\rt-thread\include\libc;..\..\rt-thread\components\finsh;..\..\ff14b\source</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -508,6 +508,11 @@
               <FileType>1</FileType>
               <FilePath>..\peripheral\lcd\lcd_init.c</FilePath>
             </File>
+            <File>
+              <FileName>bsp_spi_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\peripheral\spi_flash\src\bsp_spi_flash.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -627,6 +632,31 @@
               <FileName>shell.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\rt-thread\components\finsh\shell.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>ff14b</GroupName>
+          <Files>
+            <File>
+              <FileName>diskio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\ff14b\source\diskio.c</FilePath>
+            </File>
+            <File>
+              <FileName>ff.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\ff14b\source\ff.c</FilePath>
+            </File>
+            <File>
+              <FileName>ffsystem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\ff14b\source\ffsystem.c</FilePath>
+            </File>
+            <File>
+              <FileName>ffunicode.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\ff14b\source\ffunicode.c</FilePath>
             </File>
           </Files>
         </Group>

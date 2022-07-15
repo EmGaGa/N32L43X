@@ -22,30 +22,32 @@ Dialog DLL:      TCM.DLL V1.53.0.0
  
 <h2>Project:</h2>
 D:\Project\my_project\N32L43X\n32l43x_example\MDK-ARM\n32l43x_example.uvprojx
-Project File Date:  07/08/2022
+Project File Date:  07/15/2022
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'N32L43x'
 compiling key.c...
-..\peripheral\key\src\key.c(201): warning:  #111-D: statement is unreachable
+..\peripheral\key\src\key.c(140): warning:  #177-D: variable "res"  was declared but never referenced
+      FRESULT res;
+..\peripheral\key\src\key.c(283): warning:  #111-D: statement is unreachable
           break;
-..\peripheral\key\src\key.c(205): warning:  #111-D: statement is unreachable
+..\peripheral\key\src\key.c(287): warning:  #111-D: statement is unreachable
           break;
-..\peripheral\key\src\key.c(209): warning:  #111-D: statement is unreachable
+..\peripheral\key\src\key.c(291): warning:  #111-D: statement is unreachable
           break;
-..\peripheral\key\src\key.c(213): warning:  #111-D: statement is unreachable
+..\peripheral\key\src\key.c(295): warning:  #111-D: statement is unreachable
           break;
-..\peripheral\key\src\key.c(217): warning:  #111-D: statement is unreachable
+..\peripheral\key\src\key.c(299): warning:  #111-D: statement is unreachable
           break;
-..\peripheral\key\src\key.c(258): warning:  #940-D: missing return statement at end of non-void function "KeyRegister" 
+..\peripheral\key\src\key.c(340): warning:  #940-D: missing return statement at end of non-void function "KeyRegister" 
   }
-..\peripheral\key\src\key.c: 6 warnings, 0 errors
+..\peripheral\key\src\key.c: 7 warnings, 0 errors
 linking...
-Program Size: Code=46416 RO-data=1744 RW-data=208 ZI-data=24576  
+Program Size: Code=59336 RO-data=1860 RW-data=232 ZI-data=26712  
 FromELF: creating hex file...
 After Build - User command #1: fromelf --bin --output=.\bin\Printf.bin .\Objects\Printf.axf
-".\Objects\Printf.axf" - 0 Error(s), 6 Warning(s).
+".\Objects\Printf.axf" - 0 Error(s), 7 Warning(s).
 
 <h2>Software Packages used:</h2>
 

@@ -470,7 +470,7 @@ static void DumpClock(const char * msg)
 
 void RccInit(void)
 {
-    DumpClock("After reset");
+//    DumpClock("After reset");
     SetSysClockToPLL(108000000, SYSCLK_PLLSRC_HSEDIV2);
-    DumpClock("HSE->PLL, 108M");
+//    DumpClock("HSE->PLL, 108M");
 }

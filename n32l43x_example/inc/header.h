@@ -17,10 +17,15 @@ extern "C" {
 #include "rcc.h"
 #include "lcd.h"
 #include "lcd_init.h"
+#include "bsp_spi_flash.h"
 
 #include "log_cfg.h"
 #include "multi_button.h"
 #include "dev_ctrl.h"
+
+#include "diskio.h"
+#include "ff.h"
+#include "ffconf.h"
 
 #ifdef __cplusplus
 }

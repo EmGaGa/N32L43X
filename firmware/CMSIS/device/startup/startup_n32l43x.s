@@ -42,7 +42,8 @@ __initial_sp
 ; </h>
 
 Heap_Size       EQU     0x00000300
-
+;Heap_Size       EQU     0x00002000
+	
                 AREA    HEAP, NOINIT, READWRITE, ALIGN=3
 __heap_base
 Heap_Mem        SPACE   Heap_Size

@@ -50,11 +50,7 @@ int main(void)
 static void main_thread_entry(void * para)
 {
     PRO_LOG(LOG_DEBUG, "Entry %s. \r\n", __func__);
-//    LCD_Fill(0,0, LCD_W,LCD_H,RED);
-//    rt_thread_delay(1000);
-//    LCD_Fill(0,0, LCD_W,LCD_H,GREEN);
-//    rt_thread_delay(1000);
-//    LCD_Fill(0,0, LCD_W,LCD_H,BLUE);
+
     while(1)
     {
         rt_thread_delay(1000);

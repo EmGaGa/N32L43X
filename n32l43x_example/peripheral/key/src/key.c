@@ -2,6 +2,12 @@
 
 extern dev_handler_str dev_handler_s;
 
+static int8_t color_index = 0;
+const uint16_t color[21] = {WHITE, BLACK, BLUE, BRED, GRED, GBLUE, RED, MAGENTA,\
+                        GREEN, CYAN, YELLOW, BROWN, BRRED, GRAY, DARKBLUE, \
+                        LIGHTBLUE, GRAYBLUE, LIGHTGREEN, LGRAY, LGRAYBLUE, \
+                        LBBLUE};
+
 static void BtnUp_Single_Clicked_Handler(void* btn);
 static void BtnDown_Single_Clicked_Handler(void* btn);
 static void BtnLeft_Single_Clicked_Handler(void* btn);
@@ -19,8 +25,9 @@ static void BtnUp_Single_Clicked_Handler(void* btn)
     switch (btn_event)
     {
     case SINGLE_CLICK:
-        LCD_Fill(0,0, LCD_W,LCD_H,RED);
-        PRO_LOG(LOG_DEBUG, "BTN UP SINGLE_CLICK. \r\n");
+        if (--color_index < 0)
+            color_index = 20;
+        LCD_Fill(0,0, LCD_W,LCD_H,color[color_index]);
         break;
 
     case DOUBLE_CLICK:
@@ -49,8 +56,9 @@ static void BtnDown_Single_Clicked_Handler(void* btn)
     switch (btn_event)
     {
     case SINGLE_CLICK:
-        LCD_Fill(0,0, LCD_W,LCD_H,GREEN);
-        PRO_LOG(LOG_DEBUG, "BTN DOWN SINGLE_CLICK. \r\n");
+        if(++color_index > 20)
+            color_index = 0;
+        LCD_Fill(0,0, LCD_W,LCD_H,color[color_index]);
         break;
 
     case DOUBLE_CLICK:
@@ -70,6 +78,14 @@ static void BtnDown_Single_Clicked_Handler(void* btn)
     }
 }
 
+FATFS fs;//文件系统对象
+FIL fp;//文件对象
+char *write_text="FATFS test success!";
+unsigned int write_bytes=0;
+char read_buff[512];
+unsigned int read_bytes=0;
+BYTE work[FF_MAX_SS];
+
 static void BtnLeft_Single_Clicked_Handler(void* btn)
 {
     uint32_t btn_event;
@@ -79,8 +95,26 @@ static void BtnLeft_Single_Clicked_Handler(void* btn)
     switch (btn_event)
     {
     case SINGLE_CLICK:
-        LCD_Fill(0,0, LCD_W,LCD_H,BLUE);
-        PRO_LOG(LOG_DEBUG, "BTN LEFT SINGLE_CLICK. \r\n");
+    {
+        /* 打开文件，每次都以新建的形式打开，属性为可写 */
+        PRO_LOG(LOG_DEBUG, "\r\n****** FATFS START WRITE... ******\r\n");	
+        if(!f_open(&fp,"0:你好.txt",FA_CREATE_ALWAYS | FA_WRITE))
+        {
+            PRO_LOG(LOG_DEBUG, "open file success!\n");
+        }
+        else PRO_LOG(LOG_DEBUG, "open file failure!\n");
+        
+        if(!f_write(&fp,(char*)write_text,strlen(write_text),&write_bytes))
+        {
+            PRO_LOG(LOG_DEBUG, "write success,write_bytes=%d\n",write_bytes);
+        }
+        else PRO_LOG(LOG_DEBUG, "write failure!\n");
+        if(!f_close(&fp))
+        {
+            PRO_LOG(LOG_DEBUG, "close success!\n");
+        }
+        else PRO_LOG(LOG_DEBUG, "close failure!\n");
+    }
         break;
 
     case DOUBLE_CLICK:
@@ -103,14 +137,32 @@ static void BtnLeft_Single_Clicked_Handler(void* btn)
 static void BtnRight_Single_Clicked_Handler(void* btn)
 {
     uint32_t btn_event;
+    FRESULT res;
 
     btn_event = get_button_event((struct Button *)btn);
 
     switch (btn_event)
     {
     case SINGLE_CLICK:
-        LCD_Fill(0,0, LCD_W,LCD_H,WHITE);
-        PRO_LOG(LOG_DEBUG, "BTN RIGHT SINGLE_CLICK. \r\n");
+    {
+        PRO_LOG(LOG_DEBUG, "\r\n****** FATFS START READ... ******\r\n");
+        if(!f_open(&fp,"0:你好.txt",FA_READ))
+        {
+            PRO_LOG(LOG_DEBUG, "open file success!\n");
+        }
+        else PRO_LOG(LOG_DEBUG, "open file failure!\n");
+        if(!f_read(&fp,(char*)read_buff,sizeof(read_buff),&read_bytes))
+        {
+            PRO_LOG(LOG_DEBUG, "read success,read_bytes=%d\n",read_bytes);
+            PRO_LOG(LOG_DEBUG, "test.txt content is :%s\n",read_buff);
+        }
+        else PRO_LOG(LOG_DEBUG, "read failure!\n");
+        if(!f_close(&fp))
+        {
+            PRO_LOG(LOG_DEBUG, "close success!\n");
+        }
+        else PRO_LOG(LOG_DEBUG, "close failure!\n");
+    }
         break;
 
     case DOUBLE_CLICK:
@@ -133,16 +185,46 @@ static void BtnRight_Single_Clicked_Handler(void* btn)
 static void BtnOk_Single_Clicked_Handler(void* btn)
 {
     uint32_t btn_event;
-    static bool sta = true;
+
+    FRESULT res_flash;
 
     btn_event = get_button_event((struct Button *)btn);
 
     switch (btn_event)
     {
     case SINGLE_CLICK:
-        sta = !sta;
-        LCD_BackLight(sta);
-        PRO_LOG(LOG_DEBUG, "BTN OK SINGLE_CLICK. \r\n");
+    {
+        res_flash = f_mount(&fs,"0:",1);
+        
+    /*----------------------- 格式化测试 -----------------*/  
+        /* 如果没有文件系统就格式化创建创建文件系统 */
+        if(res_flash == FR_NO_FILESYSTEM)
+        {
+            /* 格式化 */						
+            res_flash = f_mkfs("0:", 0, work, sizeof(work));
+
+            if(res_flash == FR_OK)
+            {
+                PRO_LOG(LOG_DEBUG, "f_mkfs success. \r\n");
+                /* 格式化后，先取消挂载 */
+                res_flash = f_mount(NULL,"0:",1);			
+                /* 重新挂载	*/			
+                res_flash = f_mount(&fs,"0:",1);
+            }
+            else
+            {
+                PRO_LOG(LOG_DEBUG, "f_mkfs failed.\r\n");
+            }
+        }
+        else if(res_flash!=FR_OK)
+        {
+            PRO_LOG(LOG_DEBUG, "f_mount failed. (%d). \r\n", res_flash);
+        }
+        else
+        {
+            PRO_LOG(LOG_DEBUG, "f_mount init success, then start write and read test. \r\n");
+        }
+    }
         break;
 
     case DOUBLE_CLICK:
